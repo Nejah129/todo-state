@@ -1,25 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react'
+import "./App.css"
+import AddNewTask from './Components/AddNewTask'
+import TaskList from './Components/TaskList'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export default class App extends Component {
+
+state={
+  todos:[
+    {
+      id:Math.random(),action:"Wake Up",isDone:true
+    },
+    {
+      id:Math.random(),action:"Go Out",isDone:false
+    },
+  ],
+  newTach:""
 }
 
-export default App;
+// delete task
+handleDelete=(ID)=>this.setState({todos:this.state.todos.filter(task=>task.id!==ID)})
+// complete task
+handelComplete=(TheId)=>this.setState({todos:this.state.todos.map(el=>el.id===TheId?{...el,isDone:!el.isDone}:el)})
+//EDIT THE newTach
+handleChange=(x)=>this.setState({newTach:x})
+//ADD NEW task
+handleAdd=(newOne)=>this.setState({todos:[newOne,...this.state.todos]})
+  render() {
+    return (
+      <div className='App'>
+        <AddNewTask theText={this.state.newTach} theChange={this.handleChange} addTheTask={this.handleAdd}/>
+        <TaskList list={this.state.todos} deleteTask={this.handleDelete} complete={this.handelComplete}/>
+      </div>
+    )
+  }
+}
